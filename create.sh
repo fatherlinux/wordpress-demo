@@ -19,5 +19,8 @@ do
 	done
 	ssh -q root@$i "ls -alhZ $dir/"
 done
+
+# First create the persistent volumes:
+oc create -f persistent-volumes.yaml
 oc new-project wordpress
 oc create -f $1
