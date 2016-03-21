@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $1=="" ]
+if [ "$1" == "" ]
 then
 	echo "Please specifiy a yaml or json file. Example: ./create.sh wordpress-objects.yaml"
 	exit
