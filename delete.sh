@@ -1,5 +1,8 @@
 #!/bin/bash
 oc delete pv pv0001 pv0002
 oc delete project wordpress
-rm -rf /srv/data/pv000*/*
-ls /srv/data/pv000*
+for i in `oc get nodes | awk '{print $1}' | grep -v ^NAME$`
+do
+	ssh root@$i rm -rf $dir/pv000*
+done
+
