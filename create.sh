@@ -15,4 +15,4 @@ do
 	ssh -q root@$i "ls -alhZ $dir/"
 done
 oc new-project wordpress
-oc create -f wordpress-objects.yaml
+oc create -f $1
