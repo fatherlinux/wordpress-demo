@@ -11,8 +11,8 @@ do
 		ssh -q root@$i mkdir -p $dir/$j
 		ssh -q root@$i chmod 777 $dir/$j
 		ssh -q root@$i chcon -Rt svirt_sandbox_file_t $dir/$j
-		ssh -q root@$i "ls -alhZ $dir/"
 	done
+	ssh -q root@$i "ls -alhZ $dir/"
 done
 oc new-project wordpress
 oc create -f wordpress-objects.yaml
