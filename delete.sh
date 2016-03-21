@@ -11,4 +11,3 @@ do
 	ssh -q root@$i "ls -alhZ $dir"
 	ssh -q root@$i "docker ps -a | grep Exit | awk '{print $1}' | xargs docker rm"
 done
-
