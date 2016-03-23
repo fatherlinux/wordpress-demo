@@ -10,4 +10,5 @@ do
 	ssh -q root@$i rm -rf $dir/pv000*
 	ssh -q root@$i "ls -alhZ $dir"
 	ssh -q root@$i "docker rm `docker ps --no-trunc -a -q`"
+	ssh -q root@$i "docker rmi docker.io/wordpress"
 done
