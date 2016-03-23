@@ -22,5 +22,6 @@ done
 
 # First create the persistent volumes:
 oc create -f persistent-volumes.yaml
+sleep 5
 oc new-project wordpress
 oc create -f $1
