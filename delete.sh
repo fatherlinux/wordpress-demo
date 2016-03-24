@@ -9,6 +9,6 @@ do
 	echo "Host: $i"
 	ssh -q root@$i "rm -rf $dir/pv000* &&\
 	                ls -alhZ $dir &&\
-	                docker rm `docker ps --no-trunc -a -q` &&\
+	                docker rm \`docker ps --no-trunc -a -q\` &&\
 	                docker rmi docker.io/wordpress"
 done
