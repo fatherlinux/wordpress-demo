@@ -79,7 +79,7 @@ spec:
     spec:
       containers:
       - name: wordpress
-        image: wordpress
+        image: 172.30.53.103:5000/openshift/wordpress
         env:
           - name: WORDPRESS_DB_USER
             value: pizza
@@ -122,7 +122,6 @@ metadata:
   labels:
     name: wpfrontend
   name: wpfrontend
-  namespace: wordpress
 spec:
   host: wpfrontend-wordpress.apps.example.com
   to:
@@ -151,3 +150,58 @@ spec:
   resources:
     requests:
       storage: 2Gi
+---
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  creationTimestamp: null
+  labels:
+    app: wordpress
+  name: wordpress
+spec:
+  replicas: 1
+  selector:
+    app: wordpress
+    deploymentconfig: wordpress
+  strategy:
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: wordpress
+        deploymentconfig: wordpress
+    spec:
+      containers:
+      - image: library/wordpress:latest
+        imagePullPolicy: Always
+        name: wordpress
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - wordpress
+      from:
+        kind: ImageStreamTag
+        name: wordpress:latest
+    type: ImageChange
+status: {}
