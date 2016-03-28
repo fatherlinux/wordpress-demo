@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: openshift3/mysql-55-rhel7
+        image: registry.access.redhat.com/openshift3/mysql-55-rhel7
         env:
           - name: MYSQL_ROOT_PASSWORD
             value: pizza
