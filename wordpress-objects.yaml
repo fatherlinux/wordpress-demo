@@ -65,58 +65,6 @@ spec:
            claimName: claim-mysql
 ---
 apiVersion: v1
-kind: ReplicationController
-metadata:
-  name: wordpress
-  labels:
-    name: wordpress
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        name: wordpress
-    spec:
-      containers:
-      - name: wordpress
-        image: 172.30.53.103:5000/openshift/wordpress
-        env:
-          - name: WORDPRESS_DB_USER
-            value: pizza
-          - name: WORDPRESS_DB_PASSWORD
-            value: pizza
-          - name: WORDPRESS_DB_NAME
-            value: wp_db
-          - name: WORDPRESS_DB_HOST
-            value: mysql
-          - name: AUTH_KEY
-            value: ''
-          - name: SECURE_AUTH_KEY
-            value: ''
-          - name: LOGGED_IN_KEY
-            value: ''
-          - name: NONCE_KEY
-            value: ''
-          - name: AUTH_SALT
-            value: ''
-          - name: SECURE_AUTH_SALT
-            value: ''
-          - name: LOGGED_IN_SALT
-            value: ''
-          - name: NONCE_SALT
-            value: ''
-        ports:
-          - containerPort: 8080
-            name: wordpress
-        volumeMounts:
-          - name: wordpress-persistent-storage
-            mountPath: /var/www/html
-      volumes:
-        - name: wordpress-persistent-storage
-          persistentVolumeClaim:
-           claimName: claim-wp
----
-apiVersion: v1
 kind: Route
 metadata:
   labels:
@@ -152,16 +100,26 @@ spec:
       storage: 2Gi
 ---
 apiVersion: v1
-kind: DeploymentConfig
+kind: ImageStream
 metadata:
   creationTimestamp: null
+  name: wordpress
+spec:
+  dockerImageRepository: 172.30.41.163:5000/openshift/wordpress
+---
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: null
   labels:
-    app: wordpress
+    name: wordpress
   name: wordpress
 spec:
   replicas: 1
   selector:
-    app: wordpress
+    name: wordpress
     deploymentconfig: wordpress
   strategy:
     resources: {}
@@ -176,20 +134,47 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        app: wordpress
+        name: wordpress
         deploymentconfig: wordpress
     spec:
       containers:
-      - image: library/wordpress:latest
-        imagePullPolicy: Always
-        name: wordpress
+      - name: wordpress
+        image: 172.30.41.163:5000/openshift/wordpress:latest
+        env:
+          - name: WORDPRESS_DB_USER
+            value: pizza
+          - name: WORDPRESS_DB_PASSWORD
+            value: pizza
+          - name: WORDPRESS_DB_NAME
+            value: wp_db
+          - name: WORDPRESS_DB_HOST
+            value: mysql
+          - name: AUTH_KEY
+            value: ''
+          - name: SECURE_AUTH_KEY
+            value: ''
+          - name: LOGGED_IN_KEY
+            value: ''
+          - name: NONCE_KEY
+            value: ''
+          - name: AUTH_SALT
+            value: ''
+          - name: SECURE_AUTH_SALT
+            value: ''
+          - name: LOGGED_IN_SALT
+            value: ''
+          - name: NONCE_SALT
+            value: ''
         ports:
-        - containerPort: 8080
-          protocol: TCP
-        - containerPort: 8443
-          protocol: TCP
-        resources: {}
-        terminationMessagePath: /dev/termination-log
+          - containerPort: 8080
+            name: wordpress
+        volumeMounts:
+          - name: wordpress-persistent-storage
+            mountPath: /var/www/html
+      volumes:
+        - name: wordpress-persistent-storage
+          persistentVolumeClaim:
+           claimName: claim-wp
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       securityContext: {}
@@ -203,5 +188,6 @@ spec:
       from:
         kind: ImageStreamTag
         name: wordpress:latest
+        namespace: openshift
     type: ImageChange
 status: {}
