@@ -23,4 +23,5 @@ done
 # First create the persistent volumes:
 oc create -f persistent-volumes.yaml
 oc new-project wordpress
+oc policy add-role-to-group system:image-puller system:serviceaccounts:wordpress -n openshift
 oc create -f $1
