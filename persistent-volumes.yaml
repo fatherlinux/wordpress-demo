@@ -8,8 +8,9 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
-  hostPath:
-    path: /srv/data/pv0001
+  nfs:
+    path: /exports/data/pv0001
+    server: storage1.ocp1.dc2.crunchtools.com
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -21,8 +22,9 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
-  hostPath:
-    path: /srv/data/pv0002
+  nfs:
+    path: /exports/data/pv0002
+    server: storage1.ocp1.dc2.crunchtools.com
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -33,9 +35,9 @@ spec:
     storage: 2Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Recycle
-  hostPath:
-    path: /srv/data/pv0003
+  nfs:
+    path: /exports/data/pv0003
+    server: storage1.ocp1.dc2.crunchtools.com
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -47,5 +49,6 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Recycle
-  hostPath:
-    path: /srv/data/pv0004
+  nfs:
+    path: /exports/data/pv0004
+    server: storage1.ocp1.dc2.crunchtools.com
