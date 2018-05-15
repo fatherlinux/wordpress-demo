@@ -122,7 +122,6 @@ metadata:
   labels:
     name: wpfrontend
   name: wpfrontend
-  namespace: wordpress
 spec:
   host: wpfrontend-wordpress.apps.example.com
   to:
